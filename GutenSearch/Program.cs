@@ -36,6 +36,18 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
           .AddEntityFrameworkStores<GutenSearchContext>()
           .AddDefaultTokenProviders();
 
+// New code below to configure pw requirements during development (switch values to false/0)
+builder.Services.Configure<IdentityOptions>(options =>
+{
+  // Default Password settings.
+  options.Password.RequireDigit = false;
+  options.Password.RequireLowercase = false;
+  options.Password.RequireNonAlphanumeric = false;
+  options.Password.RequireUppercase = false;
+  options.Password.RequiredLength = 0;
+  options.Password.RequiredUniqueChars = 0;
+});
+
 
 var app = builder.Build();
 
