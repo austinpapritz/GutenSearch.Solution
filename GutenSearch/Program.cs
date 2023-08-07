@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using GutenSearch.Models;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,12 +24,18 @@ builder.Services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>()
 
 // Context builder.
 builder.Services.AddDbContext<GutenSearchContext>(
-                        dbContextOptions => dbContextOptions
-                          .UseMySql(
-                            builder.Configuration["ConnectionStrings:DefaultConnection"], ServerVersion.AutoDetect(builder.Configuration["ConnectionStrings:DefaultConnection"]
-                          )
-                        )
-                      );
+  dbContextOptions => dbContextOptions
+    .UseMySql(
+      builder.Configuration["ConnectionStrings:DefaultConnection"], ServerVersion.AutoDetect(builder.Configuration["ConnectionStrings:DefaultConnection"]
+    )
+  )
+);
+
+// Auth builder.
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+          .AddEntityFrameworkStores<GutenSearchContext>()
+          .AddDefaultTokenProviders();
+
 
 var app = builder.Build();
 

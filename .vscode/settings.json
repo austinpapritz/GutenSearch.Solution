@@ -1,3 +1,6 @@
 {
-    "dotnet.defaultSolution": "GutenSearch/GutenSearch.sln"
+    "dotnet.defaultSolution": "GutenSearch/GutenSearch.sln",
+    "cSpell.words": [
+        "Guten"
+    ]
 }

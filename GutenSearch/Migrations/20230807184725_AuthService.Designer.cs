@@ -3,6 +3,7 @@ using System;
 using GutenSearch.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GutenSearch.Migrations
 {
     [DbContext(typeof(GutenSearchContext))]
-    partial class GutenSearchContextModelSnapshot : ModelSnapshot
+    [Migration("20230807184725_AuthService")]
+    partial class AuthService
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
