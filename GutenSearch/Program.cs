@@ -55,10 +55,13 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+// Add Auth to app.
+app.UseAuthentication();
+app.UseAuthorization();
+
 // AspNetCoreRateLimit.
 app.UseIpRateLimiting();
 
-app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
