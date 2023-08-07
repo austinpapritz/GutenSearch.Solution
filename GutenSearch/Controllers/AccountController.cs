@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using GutenSearch.Models;
+using GutenSearch.ViewModels;
 using System.Threading.Tasks;
 
 namespace GutenSearch.Controllers
@@ -52,6 +53,10 @@ namespace GutenSearch.Controllers
                     return View(model);
                 }
             }
+        }
+        public ActionResult Login()
+        {
+            return View();
         }
 
         [HttpPost]

@@ -34,6 +34,12 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Books" asp-action="Edit" asp-route-id="1">Edit</a>
                         </li>
+                        <li class="nav-item">
+                            <form asp-controller="Account" asp-action="LogOff" method="post">
+                                <button type="submit" class="btn text-dark nav-link p-0 m-0 align-baseline">Log Out</button>
+                            </form>
+                        </li>
+
                     </ul>
                 </div>
             </div>
