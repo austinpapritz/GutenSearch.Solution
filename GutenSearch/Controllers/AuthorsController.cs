@@ -7,23 +7,23 @@ using System.Collections.Generic;
 
 namespace GutenSearch.Controllers;
 
-public class BooksController : Controller
+public class AuthorsController : Controller
 {
     private readonly GutenSearchContext _db;
-    public BooksController(GutenSearchContext db)
+    public AuthorsController(GutenSearchContext db)
     {
         _db = db;
     }
 
     public ActionResult Index()
     {
-        List<Book> model = _db.Books.ToList();
+        List<Author> model = _db.Authors.ToList();
         return View(model);
     }
 
     public IActionResult Details(int id)
     {
-        Book model = _db.Books.FirstOrDefault(e => e.BookId == id);
+        Author model = _db.Authors.FirstOrDefault(e => e.AuthorId == id);
 
         if (model == null)
         {
@@ -38,50 +38,50 @@ public class BooksController : Controller
     {
         // Both Create and Edit routes use `Form.cshtml`
         ViewData["FormAction"] = "Create";
-        ViewData["SubmitButton"] = "Add Book";
+        ViewData["SubmitButton"] = "Add Author";
         return View("Form");
     }
 
     [Authorize(Policy = "RequireAdministratorRole")]
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public IActionResult Create([Bind("Title")] Book exampleBook)
+    public IActionResult Create([Bind("FirstName,LastName")] Author author)
     {
         if (ModelState.IsValid)
         {
-            _db.Books.Add(exampleBook);
+            _db.Authors.Add(author);
             _db.SaveChanges();
 
             return RedirectToAction("Index");
         }
         ViewData["FormAction"] = "Create";
-        ViewData["SubmitButton"] = "Add Book";
+        ViewData["SubmitButton"] = "Add Author";
         return View("Form");
     }
     [Authorize(Policy = "RequireAdministratorRole")]
     public IActionResult Edit(int id)
     {
-        Book exampleBookToBeEdited = _db.Books.FirstOrDefault(e => e.BookId == id);
+        Author authorToBeEdited = _db.Authors.FirstOrDefault(e => e.AuthorId == id);
 
-        if (exampleBookToBeEdited == null)
+        if (authorToBeEdited == null)
         {
             return NotFound();
         }
 
         // Both Create and Edit routes use `Form.cshtml`.
         ViewData["FormAction"] = "Edit";
-        ViewData["SubmitButton"] = "Update Book";
+        ViewData["SubmitButton"] = "Update Author";
 
-        return View("Form", exampleBookToBeEdited);
+        return View("Form", authorToBeEdited);
     }
 
     [Authorize(Policy = "RequireAdministratorRole")]
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public IActionResult Edit(int id, [Bind("BookId,Title")] Book exampleBook)
+    public IActionResult Edit(int id, [Bind("AuthorId,FirstName,LastName")] Author author)
     {
         // Ensure id from form and url match.
-        if (id != exampleBook.BookId)
+        if (id != author.AuthorId)
         {
             return NotFound();
         }
@@ -91,12 +91,12 @@ public class BooksController : Controller
             // Try to update changes, catch any ConcurrencyExceptions.
             try
             {
-                _db.Update(exampleBook);
+                _db.Update(author);
                 _db.SaveChanges();
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!BookExists(exampleBook.BookId))
+                if (!AuthorExists(author.AuthorId))
                 {
                     return NotFound();
                 }
@@ -105,37 +105,18 @@ public class BooksController : Controller
                     throw;
                 }
             }
-            return RedirectToAction("details", "books", new { id = exampleBook.BookId });
+            return RedirectToAction("details", "Authors", new { id = author.AuthorId });
         }
 
         // Otherwise reload form.
         ViewData["FormAction"] = "Edit";
-        ViewData["SubmitButton"] = "Update Book";
-        return RedirectToAction("edit", new { id = exampleBook.BookId });
-    }
-
-    [Authorize(Policy = "RequireAdministratorRole")]
-    // Handled by wwwroot/js/site.js.
-    [HttpPost]
-    public IActionResult Delete(int id)
-    {
-        Book bookToBeDeleted = _db.Books.FirstOrDefault(s => s.BookId == id);
-
-        if (bookToBeDeleted == null)
-        {
-            return NotFound();
-        }
-
-        _db.Books.Remove(bookToBeDeleted);
-        _db.SaveChanges();
-
-        // Return HTTP 200 OK to AJAX request, signalling successful deletion.
-        return Ok();
+        ViewData["SubmitButton"] = "Update Author";
+        return RedirectToAction("edit", new { id = author.AuthorId });
     }
 
     // Method to validate model in db.
-    private bool BookExists(int id)
+    private bool AuthorExists(int id)
     {
-        return _db.Books.Any(e => e.BookId == id);
+        return _db.Authors.Any(e => e.AuthorId == id);
     }
 }

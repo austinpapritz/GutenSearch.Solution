@@ -3,6 +3,7 @@ using System;
 using GutenSearch.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GutenSearch.Migrations
 {
     [DbContext(typeof(GutenSearchContext))]
-    partial class GutenSearchContextModelSnapshot : ModelSnapshot
+    [Migration("20230808203514_AuthorAuthorBook")]
+    partial class AuthorAuthorBook
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -269,7 +271,7 @@ namespace GutenSearch.Migrations
             modelBuilder.Entity("GutenSearch.Models.AuthorBook", b =>
                 {
                     b.HasOne("GutenSearch.Models.Author", "Author")
-                        .WithMany()
+                        .WithMany("AuthorBooks")
                         .HasForeignKey("AuthorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -334,6 +336,11 @@ namespace GutenSearch.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("GutenSearch.Models.Author", b =>
+                {
+                    b.Navigation("AuthorBooks");
                 });
 
             modelBuilder.Entity("GutenSearch.Models.Book", b =>
