@@ -34,7 +34,9 @@ builder.Services.AddDbContext<GutenSearchContext>(
 // Auth builder.
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
           .AddEntityFrameworkStores<GutenSearchContext>()
-          .AddDefaultTokenProviders();
+          .AddDefaultTokenProviders()
+          .AddRoles<IdentityRole>();
+
 
 // New code below to configure pw requirements during development (switch values to false/0)
 builder.Services.Configure<IdentityOptions>(options =>
@@ -48,8 +50,32 @@ builder.Services.Configure<IdentityOptions>(options =>
   options.Password.RequiredUniqueChars = 0;
 });
 
+builder.Services.AddAuthorization(options =>
+{
+  options.AddPolicy("RequireAdministratorRole",
+       policy => policy.RequireRole("Librarian"));
+});
+
+//[Authorize(Policy = "RequireAdministratorRole")]
 
 var app = builder.Build();
+
+// Adding roles
+using (var scope = app.Services.CreateScope())
+{
+  var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+
+  string[] roleNames = { "Librarian" };
+  foreach (var roleName in roleNames)
+  {
+    var roleExist = roleManager.RoleExistsAsync(roleName).Result;
+    if (!roleExist)
+    {
+      roleManager.CreateAsync(new IdentityRole(roleName)).Wait();
+    }
+  }
+}
+
 
 // FOR DEVELOPMENT ONLY.
 DataInitializer.InitializeData(app);

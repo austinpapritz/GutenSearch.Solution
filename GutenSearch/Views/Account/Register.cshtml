@@ -25,7 +25,21 @@
   @Html.LabelFor(user=> user.ConfirmPassword)
   @Html.EditorFor(user=> user.ConfirmPassword)
 
-  <input type="submit" value="Register" />
+  <input type="submit" value="Register User" />
+}
+
+@using (Html.BeginForm("RegisterLibrarian", "Account", FormMethod.Post))
+{
+  @Html.LabelFor(user => user.Email)
+  @Html.TextBoxFor(user=> user.Email)
+
+  @Html.LabelFor(user=> user.Password)
+  @Html.EditorFor(user=> user.Password)
+
+  @Html.LabelFor(user=> user.ConfirmPassword)
+  @Html.EditorFor(user=> user.ConfirmPassword)
+
+  <input type="submit" value="Register Librarian" />
 }
 
 <p>@Html.ActionLink("Back to accounts page", "Index")</p>

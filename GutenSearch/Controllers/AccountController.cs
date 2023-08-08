@@ -87,5 +87,21 @@ namespace GutenSearch.Controllers
             await _signInManager.SignOutAsync();
             return RedirectToAction("Index");
         }
+
+        // Inside your AccountController:
+        [HttpPost]
+        public async Task<ActionResult> RegisterLibrarian(RegisterViewModel model)
+        {
+            // Registration code...
+            var user = new ApplicationUser { UserName = model.Email };
+            var result = await _userManager.CreateAsync(user, model.Password);
+            if (result.Succeeded)
+            {
+                await _userManager.AddToRoleAsync(user, "Librarian");
+                return RedirectToAction("Index");
+            }
+
+            return RedirectToAction("Index", "Home");
+        }
     }
 }

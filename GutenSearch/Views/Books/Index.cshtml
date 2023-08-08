@@ -12,9 +12,11 @@
 <ul>
     @foreach (Book book in Model)
     {
-			<li>
-                @book.Title
+			<li>@Html.ActionLink($"{book.Title}", "Details", new { id = book.BookId })
+                @if(User.IsInRole("Librarian")){
+                <a href="/books/edit/@book.BookId" class="emoji">✏️</a>
                 <a href="#" data-id="@book.BookId" class="delete-link emoji">❌</a>
+                }
             </li>
     }
 </ul>

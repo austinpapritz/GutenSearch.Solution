@@ -1,5 +1,7 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering; // Putting SelectList in ViewBag
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using GutenSearch.Models;
 using System.Collections.Generic;
@@ -33,6 +35,7 @@ public class BooksController : Controller
         return View(model);
     }
 
+    [Authorize(Policy = "RequireAdministratorRole")]
     public IActionResult Create()
     {
         // Both Create and Edit routes use `Form.cshtml`
@@ -41,6 +44,7 @@ public class BooksController : Controller
         return View("Form");
     }
 
+    [Authorize(Policy = "RequireAdministratorRole")]
     [HttpPost]
     [ValidateAntiForgeryToken]
     public IActionResult Create([Bind("Title")] Book exampleBook)
@@ -56,7 +60,7 @@ public class BooksController : Controller
         ViewData["SubmitButton"] = "Add Book";
         return View("Form");
     }
-
+    [Authorize(Policy = "RequireAdministratorRole")]
     public IActionResult Edit(int id)
     {
         Book exampleBookToBeEdited = _db.Books.FirstOrDefault(e => e.BookId == id);
@@ -73,6 +77,7 @@ public class BooksController : Controller
         return View("Form", exampleBookToBeEdited);
     }
 
+    [Authorize(Policy = "RequireAdministratorRole")]
     [HttpPost]
     [ValidateAntiForgeryToken]
     public IActionResult Edit(int id, [Bind("BookId,Title")] Book exampleBook)
@@ -111,6 +116,7 @@ public class BooksController : Controller
         return RedirectToAction("edit", new { id = exampleBook.BookId });
     }
 
+    [Authorize(Policy = "RequireAdministratorRole")]
     // Handled by wwwroot/js/site.js.
     [HttpPost]
     public IActionResult Delete(int id)
@@ -134,5 +140,4 @@ public class BooksController : Controller
     {
         return _db.Books.Any(e => e.BookId == id);
     }
-
 }
