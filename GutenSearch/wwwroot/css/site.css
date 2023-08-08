@@ -24,3 +24,9 @@ body {
 .form-group .btn {
   margin-top: 5px;
 }
+.user-nav {
+  position: relative;
+  top: 0;
+  right: 0;
+  padding: 8px 20px; /* Adjust the padding as needed */
+}

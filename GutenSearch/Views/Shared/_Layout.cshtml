@@ -19,34 +19,33 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Books" asp-action="Index">Book List</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Authors" asp-action="Index">Author List</a>
-                        </li>
-                        @if(User.Identity.IsAuthenticated) {
                             <li class="nav-item">
-                                <form asp-controller="Account" asp-action="LogOff" method="post">
-                                    <button type="submit" class="btn text-dark nav-link p-0 m-0 align-baseline">Log Out</button>
-                                </form>
-                            </li>
-                        }
-                        @if(User.IsInRole("Librarian")){
-                            <li class="nav-item">||</li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Books" asp-action="Create">New Book</a>
+                                <a class="nav-link text-dark" asp-controller="Home" asp-action="Index">Home</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Authors" asp-action="Create">New Author</a>
+                                <a class="nav-link text-dark" asp-controller="Books" asp-action="Index">Book List</a>
                             </li>
-                        }
-
-
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Authors" asp-action="Index">Author List</a>
+                            </li>
+                            @if(User.IsInRole("Librarian"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-controller="Books" asp-action="Create">New Book</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-controller="Authors" asp-action="Create">New Author</a>
+                                </li>
+                            }
                     </ul>
+                    <div class="user-nav">
+                        @if(User.Identity.IsAuthenticated) 
+                        {
+                        <form asp-controller="Account" asp-action="LogOff" method="post">
+                            <button type="submit" class="btn text-dark nav-link p-0 m-0 align-baseline">Log Out</button>
+                        </form>
+                        }
+                    </div>
                 </div>
             </div>
         </nav>
