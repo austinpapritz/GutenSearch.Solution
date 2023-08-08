@@ -30,6 +30,7 @@
                             </li>
                             @if(User.IsInRole("Librarian"))
                             {
+                                <li class="nav-item nav-link text-dark">||</li>
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" asp-controller="Books" asp-action="Create">New Book</a>
                                 </li>
