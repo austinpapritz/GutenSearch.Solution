@@ -2,9 +2,11 @@
     ViewData["Title"] = "Author Details";
 }
 
-<h1>@ViewData["Title"]</h1>
-
-<p>
+<h1>
     @Model.FullName 
-    <a href="#" data-id="@Model.AuthorId" data-url="/authors/delete/@Model.AuthorId" class="delete-link emoji">❌</a>
-</p>
+    @if(User.IsInRole("Librarian"))
+    {
+        <a href="/authors/edit/@Model.AuthorId" class="emoji">✏️</a>
+        <a href="#" data-id="@Model.AuthorId" data-url="/authors/delete/@Model.AuthorId" class="delete-link emoji">❌</a>
+    }
+</h1>
