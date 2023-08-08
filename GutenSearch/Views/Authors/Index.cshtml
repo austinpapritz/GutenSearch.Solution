@@ -13,7 +13,7 @@
         <li>@Html.ActionLink($"{author.FullName}", "Details", new { id = author.AuthorId })
                 @if(User.IsInRole("Librarian")){
                 <a href="/authors/edit/@author.AuthorId" class="emoji">✏️</a>
-                <a href="#" data-id="@author.AuthorId" class="delete-link emoji">❌</a>
+                <a href="#" data-id="@author.AuthorId" data-url="/authors/delete/@author.AuthorId" class="delete-link emoji">❌</a>
                 }
             </li>
     }

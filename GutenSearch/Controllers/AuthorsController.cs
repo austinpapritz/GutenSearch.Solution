@@ -118,6 +118,25 @@ public class AuthorsController : Controller
         return RedirectToAction("edit", new { id = author.AuthorId });
     }
 
+    [Authorize(Policy = "RequireAdministratorRole")]
+    // Handled by wwwroot/js/site.js.
+    [HttpPost]
+    public IActionResult Delete(int id)
+    {
+        Author authorToBeDeleted = _db.Authors.FirstOrDefault(s => s.AuthorId == id);
+
+        if (authorToBeDeleted == null)
+        {
+            return NotFound();
+        }
+
+        _db.Authors.Remove(authorToBeDeleted);
+        _db.SaveChanges();
+
+        // Return HTTP 200 OK to AJAX request, signalling successful deletion.
+        return Ok();
+    }
+
     // Method to validate model in db.
     private bool AuthorExists(int id)
     {

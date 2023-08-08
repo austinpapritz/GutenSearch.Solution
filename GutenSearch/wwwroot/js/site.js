@@ -7,8 +7,8 @@ deleteLinks.forEach((deleteLink) => {
         e.preventDefault(); 
 
         // Grab the bookId from the data-id attribute.
-        let bookId = deleteLink.getAttribute('data-id');
-        let url = "/Books/Delete/" + bookId;
+        let id = deleteLink.getAttribute('data-id');
+        let url = deleteLink.getAttribute('data-url');
         
         // Ask user for confirmation.
         if (confirm('Are you sure you want to delete this book?')) {
@@ -18,10 +18,10 @@ deleteLinks.forEach((deleteLink) => {
                 url: url,
                 type: 'POST',
                 // Delete route requires an Id.
-                data: { id: bookId },
+                data: { id: id },
                 // The controller sends back Ok() if successful.
                 success: function(result) {
-                    location.reload();
+                    location.replace('/');
                 },
                 error: function(result) {
                     alert("Error deleting book. Please try again later.");

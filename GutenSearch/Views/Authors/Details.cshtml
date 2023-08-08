@@ -4,4 +4,7 @@
 
 <h1>@ViewData["Title"]</h1>
 
-<p>@Model.FullName</p>
+<p>
+    @Model.FullName 
+    <a href="#" data-id="@Model.AuthorId" data-url="/authors/delete/@Model.AuthorId" class="delete-link emoji">❌</a>
+</p>
