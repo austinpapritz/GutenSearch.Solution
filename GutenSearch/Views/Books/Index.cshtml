@@ -10,8 +10,11 @@
 }
 
 <ul>
-    @foreach (Book exampleBook in Model)
+    @foreach (Book book in Model)
     {
-			<li>@exampleBook.Title</li>
+			<li>
+                @book.Title
+                <a href="#" data-id="@book.BookId" class="delete-link emoji">❌</a>
+            </li>
     }
 </ul>

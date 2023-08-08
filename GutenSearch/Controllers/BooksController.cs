@@ -111,9 +111,28 @@ public class BooksController : Controller
         return RedirectToAction("edit", new { id = exampleBook.BookId });
     }
 
+    // Handled by wwwroot/js/site.js.
+    [HttpPost]
+    public IActionResult Delete(int id)
+    {
+        Book bookToBeDeleted = _db.Books.FirstOrDefault(s => s.BookId == id);
+
+        if (bookToBeDeleted == null)
+        {
+            return NotFound();
+        }
+
+        _db.Books.Remove(bookToBeDeleted);
+        _db.SaveChanges();
+
+        // Return HTTP 200 OK to AJAX request, signalling successful deletion.
+        return Ok();
+    }
+
     // Method to validate model in db.
     private bool BookExists(int id)
     {
         return _db.Books.Any(e => e.BookId == id);
     }
+
 }
