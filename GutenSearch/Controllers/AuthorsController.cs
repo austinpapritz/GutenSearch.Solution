@@ -47,32 +47,35 @@ public class AuthorsController : Controller
     [ValidateAntiForgeryToken]
     public IActionResult Create([Bind("FirstName,LastName")] Author author)
     {
-        if (ModelState.IsValid)
+        if (!ModelState.IsValid)
         {
-            _db.Authors.Add(author);
-            _db.SaveChanges();
-
-            return RedirectToAction("Index");
+            // Reload form if model is invalid.
+            ViewData["FormAction"] = "Create";
+            ViewData["SubmitButton"] = "Add Author";
+            return View("Form");
         }
-        ViewData["FormAction"] = "Create";
-        ViewData["SubmitButton"] = "Add Author";
-        return View("Form");
+
+        // If model looks good, add to server and go to author list page.
+        _db.Authors.Add(author);
+        _db.SaveChanges();
+
+        return RedirectToAction("Index");
     }
+
     [Authorize(Policy = "RequireAdministratorRole")]
     public IActionResult Edit(int id)
     {
         Author authorToBeEdited = _db.Authors.FirstOrDefault(e => e.AuthorId == id);
 
-        if (authorToBeEdited == null)
+        if (authorToBeEdited != null)
         {
-            return NotFound();
+            ViewData["FormAction"] = "Edit";
+            ViewData["SubmitButton"] = "Update Author";
+
+            return View("Form", authorToBeEdited);
         }
 
-        // Both Create and Edit routes use `Form.cshtml`.
-        ViewData["FormAction"] = "Edit";
-        ViewData["SubmitButton"] = "Update Author";
-
-        return View("Form", authorToBeEdited);
+        return View("Index");
     }
 
     [Authorize(Policy = "RequireAdministratorRole")]

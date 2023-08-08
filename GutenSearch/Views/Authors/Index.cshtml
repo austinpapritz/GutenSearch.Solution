@@ -12,7 +12,7 @@
     @foreach (Author author in Model) {
         <li>@Html.ActionLink($"{author.FullName}", "Details", new { id = author.AuthorId })
                 @if(User.IsInRole("Librarian")){
-                <a href="/author/edit/@author.AuthorId" class="emoji">✏️</a>
+                <a href="/authors/edit/@author.AuthorId" class="emoji">✏️</a>
                 <a href="#" data-id="@author.AuthorId" class="delete-link emoji">❌</a>
                 }
             </li>
