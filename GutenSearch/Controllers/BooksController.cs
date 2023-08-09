@@ -1,9 +1,14 @@
+using System;
+using System.Security.AccessControl;
+using System.Reflection.PortableExecutable;
 using GutenSearch.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+
 
 namespace GutenSearch.Controllers;
 
@@ -23,7 +28,10 @@ public class BooksController : Controller
 
     public IActionResult Details(int id)
     {
-        Book model = _db.Books.FirstOrDefault(e => e.BookId == id);
+        Book model = _db.Books
+            .Include(b => b.AuthorBooks)
+            .ThenInclude(ab => ab.Author)
+            .FirstOrDefault(e => e.BookId == id);
 
         if (model == null)
         {
@@ -36,7 +44,12 @@ public class BooksController : Controller
     [Authorize(Policy = "RequireAdministratorRole")]
     public IActionResult Create()
     {
-        // Both Create and Edit routes use `Form.cshtml`
+        // Grab authors to populate dropdown.
+        List<Author> authors = _db.Authors.ToList();
+        SelectList authorList = new SelectList(authors, "AuthorId", "FullName");
+        ViewBag.AuthorId = authorList;
+
+        // Both Create and Edit routes use `Form.cshtml`.
         ViewData["FormAction"] = "Create";
         ViewData["SubmitButton"] = "Add Book";
         return View("Form");
@@ -45,19 +58,30 @@ public class BooksController : Controller
     [Authorize(Policy = "RequireAdministratorRole")]
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public IActionResult Create([Bind("Title")] Book exampleBook)
+    public IActionResult Create(int authorId, Book book)
     {
         if (ModelState.IsValid)
         {
-            _db.Books.Add(exampleBook);
+            _db.Books.Add(book);
+            _db.SaveChanges();
+
+            AuthorBook authorBook = new AuthorBook
+            {
+                AuthorId = authorId,
+                BookId = book.BookId
+            };
+
+            _db.AuthorBooks.Add(authorBook);
             _db.SaveChanges();
 
             return RedirectToAction("Index");
         }
+
         ViewData["FormAction"] = "Create";
         ViewData["SubmitButton"] = "Add Book";
         return View("Form");
     }
+
     [Authorize(Policy = "RequireAdministratorRole")]
     public IActionResult Edit(int id)
     {

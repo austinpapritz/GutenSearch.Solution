@@ -11,3 +11,11 @@
     }
 </h1>
 
+<h2>Author(s):
+    <ul>
+        @foreach(AuthorBook ab in Model.AuthorBooks)
+        {
+            <li>@ab.Author.FullName</li>
+        }
+    </ul> 
+</h2>

@@ -15,6 +15,14 @@
         @Html.HiddenFor(m => m.BookId)
     }
 
+    @* Author Dropdown *@
+    <div class="form-group">
+        <div>
+            @Html.Label("Select Author: ")
+            @Html.DropDownList("AuthorId", ViewBag.AuthorId as SelectList)
+        </div>
+    </div>
+   
     @* Title *@
     <div class="form-group">   
         <label asp-for="Title" class="control-label">Title: </label>
