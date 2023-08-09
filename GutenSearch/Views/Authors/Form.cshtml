@@ -7,7 +7,6 @@
 <h3>@ViewData["Title"]</h3>
 
 <form asp-action="@ViewData["FormAction"]" asp-controller="Authors" method="post">
-    @Html.AntiForgeryToken()
 
     @* IF form is being used to edit, then attach the Id to model. *@
     @if (Model != null && Model.AuthorId != 0)

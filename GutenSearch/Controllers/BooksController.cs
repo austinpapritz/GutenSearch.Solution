@@ -57,20 +57,22 @@ public class BooksController : Controller
 
     [Authorize(Policy = "RequireAdministratorRole")]
     [HttpPost]
-    [ValidateAntiForgeryToken]
     public IActionResult Create(int authorId, Book book)
     {
         if (ModelState.IsValid)
         {
+            // Add book to db so it gets assigned a `BookId`.
             _db.Books.Add(book);
             _db.SaveChanges();
 
+            // Manually create the associated `AuthorBook`.
             AuthorBook authorBook = new AuthorBook
             {
                 AuthorId = authorId,
                 BookId = book.BookId
             };
 
+            // Add authorBook to db.
             _db.AuthorBooks.Add(authorBook);
             _db.SaveChanges();
 
@@ -92,6 +94,11 @@ public class BooksController : Controller
             return NotFound();
         }
 
+        // Grab authors to populate dropdown.
+        List<Author> authors = _db.Authors.ToList();
+        SelectList authorList = new SelectList(authors, "AuthorId", "FullName");
+        ViewBag.AuthorId = authorList;
+
         // Both Create and Edit routes use `Form.cshtml`.
         ViewData["FormAction"] = "Edit";
         ViewData["SubmitButton"] = "Update Book";
@@ -101,8 +108,7 @@ public class BooksController : Controller
 
     [Authorize(Policy = "RequireAdministratorRole")]
     [HttpPost]
-    [ValidateAntiForgeryToken]
-    public IActionResult Edit(int id, [Bind("BookId,Title")] Book exampleBook)
+    public IActionResult Edit(int id, Book exampleBook)
     {
         // Ensure id from form and url match.
         if (id != exampleBook.BookId)

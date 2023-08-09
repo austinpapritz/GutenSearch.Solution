@@ -45,8 +45,7 @@ public class AuthorsController : Controller
 
     [Authorize(Policy = "RequireAdministratorRole")]
     [HttpPost]
-    [ValidateAntiForgeryToken]
-    public IActionResult Create([Bind("FirstName,LastName")] Author author)
+    public IActionResult Create(Author author)
     {
         if (!ModelState.IsValid)
         {
@@ -81,8 +80,7 @@ public class AuthorsController : Controller
 
     [Authorize(Policy = "RequireAdministratorRole")]
     [HttpPost]
-    [ValidateAntiForgeryToken]
-    public IActionResult Edit(int id, [Bind("AuthorId,FirstName,LastName")] Author author)
+    public IActionResult Edit(int id, Author author)
     {
         // Ensure id from form and url match.
         if (id != author.AuthorId)
