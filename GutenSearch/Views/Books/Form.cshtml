@@ -18,7 +18,7 @@
     <div class="form-group">
         <div>
             @Html.Label("Select Author: ")
-            @Html.DropDownList("AuthorId", ViewBag.AuthorId as SelectList)
+            @Html.ListBox("AuthorIds", ViewBag.AuthorIds as MultiSelectList, new { @class = "form-control" })
         </div>
     </div>
    

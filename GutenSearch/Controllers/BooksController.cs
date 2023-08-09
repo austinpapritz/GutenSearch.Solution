@@ -46,8 +46,8 @@ public class BooksController : Controller
     {
         // Grab authors to populate dropdown.
         List<Author> authors = _db.Authors.ToList();
-        SelectList authorList = new SelectList(authors, "AuthorId", "FullName");
-        ViewBag.AuthorId = authorList;
+        MultiSelectList authorList = new MultiSelectList(authors, "AuthorId", "FullName");
+        ViewBag.AuthorIds = authorList;
 
         // Both Create and Edit routes use `Form.cshtml`.
         ViewData["FormAction"] = "Create";
@@ -57,7 +57,7 @@ public class BooksController : Controller
 
     [Authorize(Policy = "RequireAdministratorRole")]
     [HttpPost]
-    public IActionResult Create(int authorId, Book book)
+    public IActionResult Create(List<int> authorIds, Book book)
     {
         if (ModelState.IsValid)
         {
@@ -66,14 +66,18 @@ public class BooksController : Controller
             _db.SaveChanges();
 
             // Manually create the associated `AuthorBook`.
-            AuthorBook authorBook = new AuthorBook
+            foreach (int authorId in authorIds)
             {
-                AuthorId = authorId,
-                BookId = book.BookId
-            };
+                AuthorBook authorBook = new AuthorBook
+                {
+                    AuthorId = authorId,
+                    BookId = book.BookId
+                };
 
-            // Add authorBook to db.
-            _db.AuthorBooks.Add(authorBook);
+                // Add authorBook to db.
+                _db.AuthorBooks.Add(authorBook);
+            }
+
             _db.SaveChanges();
 
             return RedirectToAction("Index");
