@@ -91,7 +91,11 @@ public class BooksController : Controller
     [Authorize(Policy = "RequireAdministratorRole")]
     public IActionResult Edit(int id)
     {
-        Book exampleBookToBeEdited = _db.Books.FirstOrDefault(e => e.BookId == id);
+        // Fetch the book and its authors.
+        Book exampleBookToBeEdited = _db.Books
+            .Include(b => b.AuthorBooks)
+            .ThenInclude(ab => ab.Author)
+            .FirstOrDefault(e => e.BookId == id);
 
         if (exampleBookToBeEdited == null)
         {
@@ -100,8 +104,15 @@ public class BooksController : Controller
 
         // Grab authors to populate dropdown.
         List<Author> authors = _db.Authors.ToList();
-        SelectList authorList = new SelectList(authors, "AuthorId", "FullName");
-        ViewBag.AuthorId = authorList;
+
+        // Get the selected author IDs for the book.
+        List<int> selectedAuthorIds = exampleBookToBeEdited.AuthorBooks
+            .Select(ab => ab.AuthorId)
+            .ToList();
+
+        // Create `MultiSelectList`, send in `selectedAuthorIds` to preselect authors.
+        MultiSelectList authorList = new MultiSelectList(authors, "AuthorId", "FullName", selectedAuthorIds);
+        ViewBag.AuthorIds = authorList;
 
         // Both Create and Edit routes use `Form.cshtml`.
         ViewData["FormAction"] = "Edit";
