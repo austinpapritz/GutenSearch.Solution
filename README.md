@@ -15,9 +15,9 @@ Library Prompt
 
 ## Patron
 
-- As a patron, I want to check a book out, so that I can take it home with me. I should only be able to do this if I am logged in.
-
 - As a patron, I want to know how many copies of a book are on the shelf, so that I can see if any are available. (Hint: make a copies table; a book should have many copies.)
+
+- As a patron, I want to check a book out, so that I can take it home with me. I should only be able to do this if I am logged in.
 
 - As a patron, I want to see a history of all the books I checked out, so that I can look up the name of that awesome sci-fi novel I read three years ago. (Hint: make a checkouts table that is a join table between patrons and copies.)
 
