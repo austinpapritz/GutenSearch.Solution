@@ -123,20 +123,41 @@ public class BooksController : Controller
 
     [Authorize(Policy = "RequireAdministratorRole")]
     [HttpPost]
-    public IActionResult Edit(int id, Book exampleBook)
+    public IActionResult Edit(int id, List<int> authorIds, Book book)
     {
         if (ModelState.IsValid)
         {
-            _db.Update(exampleBook);
+            _db.Update(book);
             _db.SaveChanges();
 
-            return RedirectToAction("details", "books", new { id = exampleBook.BookId });
+            // Fetch the book from db.
+            var bookInDatabase = _db.Books
+                .Include(b => b.AuthorBooks)
+                .FirstOrDefault(b => b.BookId == id);
+
+            // Clear book's old AuthorBooks list.
+            bookInDatabase.AuthorBooks.Clear();
+
+            // Manually Re-add each AuthorBook with the `List<int> authorIds` from form.
+            foreach (int authorId in authorIds)
+            {
+                AuthorBook authorBook = new AuthorBook
+                {
+                    AuthorId = authorId,
+                    BookId = book.BookId
+                };
+                // Add authorBook to db.
+                _db.AuthorBooks.Add(authorBook);
+            }
+            _db.SaveChanges();
+
+            return RedirectToAction("details", "books", new { id = book.BookId });
         }
 
         // Otherwise reload form.
         ViewData["FormAction"] = "Edit";
         ViewData["SubmitButton"] = "Update Book";
-        return RedirectToAction("edit", new { id = exampleBook.BookId });
+        return RedirectToAction("edit", new { id = book.BookId });
     }
 
     [Authorize(Policy = "RequireAdministratorRole")]
