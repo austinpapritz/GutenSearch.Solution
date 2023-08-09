@@ -7,7 +7,7 @@
     @if(User.IsInRole("Librarian"))
     {
         <a href="/books/edit/@Model.BookId" class="emoji">✏️</a>
-        <a href="#" data-id="@Model.BookId" data-url="/authors/delete/@Model.BookId" class="delete-link emoji">❌</a>
+        <a href="#" data-id="@Model.BookId" data-url="/books/delete/@Model.BookId" class="delete-link emoji">❌</a>
     }
 </h1>
 

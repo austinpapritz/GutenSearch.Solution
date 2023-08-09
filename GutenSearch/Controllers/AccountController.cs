@@ -81,6 +81,7 @@ namespace GutenSearch.Controllers
             }
         }
 
+
         [HttpPost]
         public async Task<ActionResult> LogOff()
         {

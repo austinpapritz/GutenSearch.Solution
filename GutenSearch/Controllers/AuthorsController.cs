@@ -24,7 +24,10 @@ public class AuthorsController : Controller
 
     public IActionResult Details(int id)
     {
-        Author model = _db.Authors.FirstOrDefault(e => e.AuthorId == id);
+        Author model = _db.Authors
+        .Include(a => a.AuthorBooks)
+        .ThenInclude(ab => ab.Book)
+        .FirstOrDefault(e => e.AuthorId == id);
 
         if (model == null)
         {

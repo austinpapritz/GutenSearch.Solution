@@ -15,7 +15,7 @@
 			<li>@Html.ActionLink($"{book.Title}", "Details", new { id = book.BookId })
                 @if(User.IsInRole("Librarian")){
                 <a href="/books/edit/@book.BookId" class="emoji">✏️</a>
-                <a href="#" data-id="@book.BookId" data-url="/authors/delete/@book.BookId" class="delete-link emoji">❌</a>
+                <a href="#" data-id="@book.BookId" data-url="/books/delete/@book.BookId" class="delete-link emoji">❌</a>
                 }
             </li>
     }

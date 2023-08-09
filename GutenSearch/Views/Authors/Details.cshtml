@@ -2,6 +2,7 @@
     ViewData["Title"] = "Author Details";
 }
 
+
 <h1>
     @Model.FullName 
     @if(User.IsInRole("Librarian"))
@@ -10,3 +11,11 @@
         <a href="#" data-id="@Model.AuthorId" data-url="/authors/delete/@Model.AuthorId" class="delete-link emoji">❌</a>
     }
 </h1>
+<h2>Book(s):
+    <ul>
+        @foreach(AuthorBook ab in Model.AuthorBooks)
+        {
+            <li>@ab.Book.Title</li>
+        }
+    </ul> 
+</h2>
