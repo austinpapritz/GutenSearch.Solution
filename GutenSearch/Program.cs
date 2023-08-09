@@ -53,10 +53,14 @@ builder.Services.Configure<IdentityOptions>(options =>
 builder.Services.AddAuthorization(options =>
 {
   options.AddPolicy("RequireAdministratorRole",
-       policy => policy.RequireRole("Librarian"));
+    policy => policy.RequireRole("Librarian"));
+  options.AddPolicy("RequirePatronRole",
+    policy => policy.RequireRole("Patron"));
 });
 
+// Place these tags in controller above routes you want to protect.
 //[Authorize(Policy = "RequireAdministratorRole")]
+//[Authorize(Policy = "RequirePatronRole")]
 
 var app = builder.Build();
 
@@ -65,7 +69,7 @@ using (var scope = app.Services.CreateScope())
 {
   var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
-  string[] roleNames = { "Librarian" };
+  string[] roleNames = { "Librarian", "Patron" };
   foreach (var roleName in roleNames)
   {
     var roleExist = roleManager.RoleExistsAsync(roleName).Result;

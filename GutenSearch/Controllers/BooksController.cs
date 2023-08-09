@@ -26,6 +26,8 @@ public class BooksController : Controller
         return View(model);
     }
 
+    [Authorize(Policy = "RequireAdministratorRole")]
+    [Authorize(Policy = "RequirePatronRole")]
     public IActionResult Details(int id)
     {
         Book model = _db.Books

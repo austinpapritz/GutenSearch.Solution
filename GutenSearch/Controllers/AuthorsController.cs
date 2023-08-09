@@ -22,6 +22,8 @@ public class AuthorsController : Controller
         return View(model);
     }
 
+    [Authorize(Policy = "RequireAdministratorRole")]
+    [Authorize(Policy = "RequirePatronRole")]
     public IActionResult Details(int id)
     {
         Author model = _db.Authors

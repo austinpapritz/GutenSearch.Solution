@@ -9,7 +9,7 @@ Library Prompt
 
 - As a librarian, I want to search for a book by author or title, so that I can find a book when there are a lot of books in the library.
 
-- As a librarian, I want to enter multiple authors for a book, so that I can include accurate information in my catalog. (Hint: make an authors table and a books table with a many-to-many relationship.)
+- DONE: As a librarian, I want to enter multiple authors for a book, so that I can include accurate information in my catalog. (Hint: make an authors table and a books table with a many-to-many relationship.)
 
 - As a librarian, I want to see a list of overdue books, so that I can call up the patron who checked them out and tell them to bring them back — OR ELSE!
 
