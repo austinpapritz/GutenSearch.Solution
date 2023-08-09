@@ -110,31 +110,11 @@ public class BooksController : Controller
     [HttpPost]
     public IActionResult Edit(int id, Book exampleBook)
     {
-        // Ensure id from form and url match.
-        if (id != exampleBook.BookId)
-        {
-            return NotFound();
-        }
-
         if (ModelState.IsValid)
         {
-            // Try to update changes, catch any ConcurrencyExceptions.
-            try
-            {
-                _db.Update(exampleBook);
-                _db.SaveChanges();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!BookExists(exampleBook.BookId))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            _db.Update(exampleBook);
+            _db.SaveChanges();
+
             return RedirectToAction("details", "books", new { id = exampleBook.BookId });
         }
 

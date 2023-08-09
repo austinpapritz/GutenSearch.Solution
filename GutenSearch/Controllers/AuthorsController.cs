@@ -82,31 +82,11 @@ public class AuthorsController : Controller
     [HttpPost]
     public IActionResult Edit(int id, Author author)
     {
-        // Ensure id from form and url match.
-        if (id != author.AuthorId)
-        {
-            return NotFound();
-        }
-
         if (ModelState.IsValid)
         {
-            // Try to update changes, catch any ConcurrencyExceptions.
-            try
-            {
-                _db.Update(author);
-                _db.SaveChanges();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!AuthorExists(author.AuthorId))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            _db.Update(author);
+            _db.SaveChanges();
+
             return RedirectToAction("details", "Authors", new { id = author.AuthorId });
         }
 
